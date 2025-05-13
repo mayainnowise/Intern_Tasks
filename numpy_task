@@ -1,17 +1,85 @@
 #Упражнения по библиотеке Numpy
 import numpy as np
+
+# Cлучайный массив
+random_arr = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+random_arr_2d = np.array([[1, 2, 3, 4],['a', 'b', 'c', 'd']])
+
 #1. Дан случайный массив, поменять знак у элементов, значения которых между 3 и 8
 
+mask = (random_arr > 3) & (random_arr < 8)
+random_arr[mask] = -random_arr[mask]
+print(random_arr)
 
 #2. Заменить максимальный элемент случайного массива на 0
 
+max_index = np.argmax(random_arr) #возвращает индекс
+random_arr[max_index] = 0
+print(random_arr)
+
 #3. Построить прямое произведение массивов (все комбинации с каждым элементом). На вход подается двумерный массив
+
+def cartesian_product(arr_2d):  
+    result = []
+    for elem1 in arr_2d[0]:
+        for elem2 in arr_2d[1]:
+            result.append([elem1, elem2])
+    return result        
+            
+cartesian_product(random_arr_2d)
 
 #4. Даны 2 массива A (8x3) и B (2x2). Найти строки в A, которые содержат элементы из каждой строки в B, независимо от порядка элементов в B
 
+A = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+    [10, 11, 12],
+    [13, 14, 15],
+    [16, 17, 18],
+    [19, 20, 21],
+    [22, 23, 24],
+    [25, 25, 25]
+]
+
+B = [
+    [5, 6],
+    [17, 18]
+]
+
+A_flatten = np.array(A).flatten() 
+B_flatten = np.array(B).flatten()
+
+def all_elements_in(A_flatten, B_flatten):
+    for elem_B in B_flatten:
+        if elem_B not in A_flatten:
+            return False  # Если хотя бы один элемент не найден в A_flatten, возвращаем False
+    return True
+
+all_elements_in(A_flatten, B_flatten)
+
 #5. Дана 10x3 матрица, найти строки из неравных значений (например строка [2,2,3] остается, строка [3,3,3] удаляется)
 
+def non_equal_rows(arr):
+    new_arr = arr
+    for row in arr:
+        if len(set(row)) == 1:
+            new_arr.remove(row) 
+    return new_arr
+
+non_equal_rows(A)
+
 #6. Дан двумерный массив. Удалить те строки, которые повторяются
+
+result = []
+
+def remove_duplicates(A):
+    for row in A:
+        if row not in result:
+            result.append(row)
+    return result        
+
+remove_duplicates(A)
 
 #Для каждой из следующих задач (1-5) нужно привести 2 реализации – одна без использования numpy (cчитайте, что там, где на входе или выходе должны быть numpy array, будут просто списки), а вторая полностью векторизованная с использованием numpy (без использования питоновских циклов/map/list comprehension).
 #Замечание 1. Можно считать, что все указанные объекты непустые (к примеру, в задаче 1 на диагонали матрицы есть ненулевые элементы).
